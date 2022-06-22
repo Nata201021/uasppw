@@ -1,0 +1,1529 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Topic Modelling using Latent Semantic Analysis (LSA) and Latent Dirichlet Allocation (LDA) in sklearn &#8212; My sample book</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">My sample book</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    <no title>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="markdown.html">
+   Markdown Files
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="notebooks.html">
+   Content with notebooks
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="markdown-notebooks.html">
+   Notebooks with MyST Markdown
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/docs/Topic Modelling.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FTopic Modelling.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/Topic Modelling.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Topic Modelling using Latent Semantic Analysis (LSA) and Latent Dirichlet Allocation (LDA) in sklearn
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#there-also-exists-implementation-using-the-gensim-libray-checkout-the-same-here-here-and-here-and-also-in-this-notebook">
+     <strong>
+      There also exists implementation using the Gensim libray. Checkout the same here  ,   here and here and also in this notebook.
+     </strong>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#please-star-upvote-in-case-u-like-it">
+   [Please star/upvote in case u like it. ]
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#importing-modules">
+     IMPORTING MODULES
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#loading-the-dataset">
+     LOADING THE DATASET
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-cleaning-pre-processing">
+     DATA CLEANING &amp; PRE-PROCESSING
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#extracting-the-features-and-creating-the-document-term-matrix-dtm">
+     EXTRACTING THE FEATURES AND CREATING THE DOCUMENT-TERM-MATRIX ( DTM )
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#we-can-now-see-the-most-frequent-and-rare-words-in-the-news-headlines-based-on-idf-score-the-lesser-the-value-more-common-is-the-word-in-the-news-headlines">
+     We can now see the most frequent and rare words in the news headlines based on idf score. The lesser the value; more common is the word in the news headlines.
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#topic-modelling">
+     TOPIC MODELLING
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#latent-semantic-analysis-lsa">
+   Latent Semantic Analysis (LSA)
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#now-e-can-get-a-list-of-the-important-words-for-eah-of-the-10-topics-as-shown-for-simplicity-here-i-have-shown-10-words-for-each-topic">
+     Now e can get a list of the important words for eah of the 10 topics as shown. For simplicity here I have shown 10 words for each topic.
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#latent-dirichlet-allocation-lda">
+   Latent Dirichlet Allocation (LDA)
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#note-that-the-values-in-a-particular-row-adds-to-1-this-is-beacuse-each-value-denotes-the-of-contribution-of-the-corressponding-topic-in-the-document">
+     Note that the values in a particular row adds to 1. This is beacuse each value denotes the % of contribution of the corressponding topic in the document.
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#as-we-can-see-topic-7-8-are-dominantly-present-in-document-0">
+     As we can see Topic 7 &amp; 8 are dominantly present in document 0.
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#most-important-words-for-a-topic-say-10-this-time">
+     Most important words for a topic. (say 10 this time.)
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#to-better-visualize-words-in-a-topic-we-can-see-the-word-cloud-for-each-topic-top-50-words-are-plotted">
+     To better visualize words in a topic we can see the word cloud. For each topic top 50 words are plotted.
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-end">
+   THE END !!!
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#please-star-upvote-in-case-u-liked-it">
+   [Please star/upvote in case u liked it. ]
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Topic Modelling using Latent Semantic Analysis (LSA) and Latent Dirichlet Allocation (LDA) in sklearn</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Topic Modelling using Latent Semantic Analysis (LSA) and Latent Dirichlet Allocation (LDA) in sklearn
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#there-also-exists-implementation-using-the-gensim-libray-checkout-the-same-here-here-and-here-and-also-in-this-notebook">
+     <strong>
+      There also exists implementation using the Gensim libray. Checkout the same here  ,   here and here and also in this notebook.
+     </strong>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#please-star-upvote-in-case-u-like-it">
+   [Please star/upvote in case u like it. ]
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#importing-modules">
+     IMPORTING MODULES
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#loading-the-dataset">
+     LOADING THE DATASET
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-cleaning-pre-processing">
+     DATA CLEANING &amp; PRE-PROCESSING
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#extracting-the-features-and-creating-the-document-term-matrix-dtm">
+     EXTRACTING THE FEATURES AND CREATING THE DOCUMENT-TERM-MATRIX ( DTM )
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#we-can-now-see-the-most-frequent-and-rare-words-in-the-news-headlines-based-on-idf-score-the-lesser-the-value-more-common-is-the-word-in-the-news-headlines">
+     We can now see the most frequent and rare words in the news headlines based on idf score. The lesser the value; more common is the word in the news headlines.
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#topic-modelling">
+     TOPIC MODELLING
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#latent-semantic-analysis-lsa">
+   Latent Semantic Analysis (LSA)
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#now-e-can-get-a-list-of-the-important-words-for-eah-of-the-10-topics-as-shown-for-simplicity-here-i-have-shown-10-words-for-each-topic">
+     Now e can get a list of the important words for eah of the 10 topics as shown. For simplicity here I have shown 10 words for each topic.
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#latent-dirichlet-allocation-lda">
+   Latent Dirichlet Allocation (LDA)
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#note-that-the-values-in-a-particular-row-adds-to-1-this-is-beacuse-each-value-denotes-the-of-contribution-of-the-corressponding-topic-in-the-document">
+     Note that the values in a particular row adds to 1. This is beacuse each value denotes the % of contribution of the corressponding topic in the document.
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#as-we-can-see-topic-7-8-are-dominantly-present-in-document-0">
+     As we can see Topic 7 &amp; 8 are dominantly present in document 0.
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#most-important-words-for-a-topic-say-10-this-time">
+     Most important words for a topic. (say 10 this time.)
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#to-better-visualize-words-in-a-topic-we-can-see-the-word-cloud-for-each-topic-top-50-words-are-plotted">
+     To better visualize words in a topic we can see the word cloud. For each topic top 50 words are plotted.
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-end">
+   THE END !!!
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#please-star-upvote-in-case-u-liked-it">
+   [Please star/upvote in case u liked it. ]
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="topic-modelling-using-latent-semantic-analysis-lsa-and-latent-dirichlet-allocation-lda-in-sklearn">
+<h1>Topic Modelling using Latent Semantic Analysis (LSA) and Latent Dirichlet Allocation (LDA) in sklearn<a class="headerlink" href="#topic-modelling-using-latent-semantic-analysis-lsa-and-latent-dirichlet-allocation-lda-in-sklearn" title="Permalink to this headline">#</a></h1>
+<section id="there-also-exists-implementation-using-the-gensim-libray-checkout-the-same-here-here-and-here-and-also-in-this-notebook">
+<h2><strong>There also exists implementation using the Gensim libray. Checkout the same <a class="reference external" href="https://www.analyticsvidhya.com/blog/2016/08/beginners-guide-to-topic-modeling-in-python/">here</a>  ,   <a class="reference external" href="https://nlpforhackers.io/topic-modeling/">here</a> and <a class="reference external" href="https://www.machinelearningplus.com/nlp/topic-modeling-gensim-python/">here</a> and also in <a class="reference external" href="https://github.com/susanli2016/NLP-with-Python/blob/master/LDA_news_headlines.ipynb">this</a> notebook.</strong><a class="headerlink" href="#there-also-exists-implementation-using-the-gensim-libray-checkout-the-same-here-here-and-here-and-also-in-this-notebook" title="Permalink to this headline">#</a></h2>
+</section>
+</section>
+<section id="please-star-upvote-in-case-u-like-it">
+<h1>[Please star/upvote in case u like it. ]<a class="headerlink" href="#please-star-upvote-in-case-u-like-it" title="Permalink to this headline">#</a></h1>
+<section id="importing-modules">
+<h2>IMPORTING MODULES<a class="headerlink" href="#importing-modules" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nltk</span>
+<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span><span class="n">halt_on_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="nn">Input In [1],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">nltk</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span><span class="n">halt_on_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;nltk&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># data visualisation and manipulation</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">style</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="c1">#configure</span>
+<span class="c1"># sets matplotlib to inline and displays graphs below the corressponding cell.</span>
+<span class="o">%</span> <span class="n">matplotlib</span> <span class="n">inline</span>  
+<span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;fivethirtyeight&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">&#39;whitegrid&#39;</span><span class="p">,</span><span class="n">color_codes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#import nltk</span>
+<span class="kn">import</span> <span class="nn">nltk</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="kn">from</span> <span class="nn">nltk.tokenize</span> <span class="kn">import</span> <span class="n">word_tokenize</span><span class="p">,</span><span class="n">sent_tokenize</span>
+
+<span class="c1">#preprocessing</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>  <span class="c1">#stopwords</span>
+<span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">word_tokenize</span><span class="p">,</span><span class="n">sent_tokenize</span> <span class="c1"># tokenizing</span>
+<span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">PorterStemmer</span><span class="p">,</span><span class="n">LancasterStemmer</span>  <span class="c1"># using the Porter Stemmer and Lancaster Stemmer and others</span>
+<span class="kn">from</span> <span class="nn">nltk.stem.snowball</span> <span class="kn">import</span> <span class="n">SnowballStemmer</span>
+<span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">WordNetLemmatizer</span>  <span class="c1"># lammatizer from WordNet</span>
+
+<span class="c1"># for named entity recognition (NER)</span>
+<span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">ne_chunk</span>
+
+<span class="c1"># vectorizers for creating the document-term-matrix (DTM)</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span><span class="p">,</span><span class="n">CountVectorizer</span>
+
+<span class="c1">#stop-words</span>
+<span class="n">stop_words</span><span class="o">=</span><span class="nb">set</span><span class="p">(</span><span class="n">nltk</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>apt-get install -y -qq software-properties-common python-software-properties module-init-tools
+<span class="o">!</span>add-apt-repository -y ppa:alessandro-strada/ppa <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> &gt; /dev/null
+<span class="o">!</span>apt-get update -qq <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> &gt; /dev/null
+<span class="o">!</span>apt-get -y install -qq google-drive-ocamlfuse fuse
+<span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">auth</span>
+<span class="n">auth</span><span class="o">.</span><span class="n">authenticate_user</span><span class="p">()</span>
+<span class="kn">from</span> <span class="nn">oauth2client.client</span> <span class="kn">import</span> <span class="n">GoogleCredentials</span>
+<span class="n">creds</span> <span class="o">=</span> <span class="n">GoogleCredentials</span><span class="o">.</span><span class="n">get_application_default</span><span class="p">()</span>
+<span class="kn">import</span> <span class="nn">getpass</span>
+<span class="o">!</span>google-drive-ocamlfuse -headless -id<span class="o">={</span>creds.client_id<span class="o">}</span> -secret<span class="o">={</span>creds.client_secret<span class="o">}</span> &lt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> grep URL
+<span class="n">vcode</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">()</span>
+<span class="o">!</span><span class="nb">echo</span> <span class="o">{</span>vcode<span class="o">}</span> <span class="p">|</span> google-drive-ocamlfuse -headless -id<span class="o">={</span>creds.client_id<span class="o">}</span> -secret<span class="o">={</span>creds.client_secret<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>E: Package &#39;python-software-properties&#39; has no installation candidate
+··········
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>mkdir -p drive
+<span class="o">!</span>google-drive-ocamlfuse drive
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fuse: mountpoint is not empty
+fuse: if you are sure this is safe, use the &#39;nonempty&#39; mount option
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="loading-the-dataset">
+<h2>LOADING THE DATASET<a class="headerlink" href="#loading-the-dataset" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;jurnal_terlabeli.xlsx&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>publish_date</th>
+      <th>headline_text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>20030219</td>
+      <td>aba decides against community broadcasting lic...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20030219</td>
+      <td>act fire witnesses must be aware of defamation</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>20030219</td>
+      <td>a g calls for infrastructure protection summit</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>20030219</td>
+      <td>air nz staff in aust strike for pay rise</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>20030219</td>
+      <td>air nz strike to affect australian travellers</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>We will drop the <strong>‘publish_date’</strong> column as it is useless for our discussion.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># drop the publish date.</span>
+<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;publish_date&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>headline_text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>aba decides against community broadcasting lic...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>act fire witnesses must be aware of defamation</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>a g calls for infrastructure protection summit</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>air nz staff in aust strike for pay rise</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>air nz strike to affect australian travellers</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>ambitious olsson wins triple jump</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>antic delighted with record breaking barca</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>aussie qualifier stosur wastes four memphis match</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>aust addresses un security council over iraq</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>australia is locked into war timetable opp</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="data-cleaning-pre-processing">
+<h2>DATA CLEANING &amp; PRE-PROCESSING<a class="headerlink" href="#data-cleaning-pre-processing" title="Permalink to this headline">#</a></h2>
+<p>Here I have done the data pre-processing. I have used the lemmatizer and can also use the stemmer. Also the stop words have been used along with the words wit lenght shorter than 3 characters to reduce some stray words.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">headline</span><span class="p">):</span>
+  <span class="n">le</span><span class="o">=</span><span class="n">WordNetLemmatizer</span><span class="p">()</span>
+  <span class="n">word_tokens</span><span class="o">=</span><span class="n">word_tokenize</span><span class="p">(</span><span class="n">headline</span><span class="p">)</span>
+  <span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">le</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">word_tokens</span> <span class="k">if</span> <span class="n">w</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stop_words</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">3</span><span class="p">]</span>
+  <span class="n">cleaned_text</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">cleaned_text</span>
+  
+  
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># time taking</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;headline_cleaned_text&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;headline_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">clean_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>headline_text</th>
+      <th>headline_cleaned_text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>aba decides against community broadcasting lic...</td>
+      <td>decides community broadcasting licence</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>act fire witnesses must be aware of defamation</td>
+      <td>fire witness must aware defamation</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>a g calls for infrastructure protection summit</td>
+      <td>call infrastructure protection summit</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>air nz staff in aust strike for pay rise</td>
+      <td>staff aust strike rise</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>air nz strike to affect australian travellers</td>
+      <td>strike affect australian traveller</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Can see the difference after removal of stopwords and some shorter words. aslo the words have been lemmatized as in <strong>‘calls’—&gt;’call’.</strong></p>
+<p>Now drop the unpre-processed column.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;headline_text&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>headline_cleaned_text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>decides community broadcasting licence</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>fire witness must aware defamation</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>call infrastructure protection summit</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>staff aust strike rise</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>strike affect australian traveller</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>We can also see any particular news headline.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;headline_cleaned_text&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;decides community broadcasting licence&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="extracting-the-features-and-creating-the-document-term-matrix-dtm">
+<h2>EXTRACTING THE FEATURES AND CREATING THE DOCUMENT-TERM-MATRIX ( DTM )<a class="headerlink" href="#extracting-the-features-and-creating-the-document-term-matrix-dtm" title="Permalink to this headline">#</a></h2>
+<p>In DTM the values are the TFidf values.</p>
+<p>Also I have specified some parameters of the Tfidf vectorizer.</p>
+<p>Some important points:-</p>
+<p><strong>1) LSA is generally implemented with Tfidf values everywhere and not with the Count Vectorizer.</strong></p>
+<p><strong>2) max_features depends on your computing power and also on eval. metric (coherence score is a metric for topic model). Try the value that gives best eval. metric and doesn’t limits processing power.</strong></p>
+<p><strong>3) Default values for min_df &amp; max_df worked well.</strong></p>
+<p><strong>4) Can try different values for ngram_range.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vect</span> <span class="o">=</span><span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">stop_words</span><span class="o">=</span><span class="n">stop_words</span><span class="p">,</span><span class="n">max_features</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span> <span class="c1"># to play with. min_df,max_df,max_features etc...</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vect_text</span><span class="o">=</span><span class="n">vect</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;headline_cleaned_text&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="we-can-now-see-the-most-frequent-and-rare-words-in-the-news-headlines-based-on-idf-score-the-lesser-the-value-more-common-is-the-word-in-the-news-headlines">
+<h2>We can now see the most frequent and rare words in the news headlines based on idf score. The lesser the value; more common is the word in the news headlines.<a class="headerlink" href="#we-can-now-see-the-most-frequent-and-rare-words-in-the-news-headlines-based-on-idf-score-the-lesser-the-value-more-common-is-the-word-in-the-news-headlines" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">vect_text</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">vect_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1103665, 1000)
+  (0, 178)	0.6247000549095533
+  (0, 507)	0.7808648035325968
+  (1, 320)	0.44224803605927093
+  (1, 982)	0.6339199641322228
+  (1, 575)	0.6344778590907005
+  (2, 120)	0.5644371969796811
+  (2, 683)	0.8254760145914118
+  (3, 829)	0.5335839392638414
+  (3, 52)	0.5181419180317365
+  (3, 845)	0.4893827547760373
+  (3, 745)	0.45532587436460414
+  (4, 845)	0.7601376435177256
+  (4, 54)	0.6497620817709503
+  (5, 977)	0.6070768588163491
+  (5, 472)	0.7946431195761244
+  (6, 711)	1.0
+  (7, 51)	0.4576558531379432
+  (7, 960)	0.5395152091846916
+  (7, 343)	0.48237669514032133
+  (7, 543)	0.5165144558794856
+  (8, 52)	0.46613929548695054
+  (8, 12)	0.5263356683096936
+  (8, 778)	0.4504550964714952
+  (8, 200)	0.3477613388846276
+  (8, 452)	0.42642370795717344
+  :	:
+  (1103656, 478)	0.5473775398163588
+  (1103656, 626)	0.5843644384740314
+  (1103657, 53)	0.34045218038840586
+  (1103657, 967)	0.4180012338645188
+  (1103657, 994)	0.35908839361701855
+  (1103657, 816)	0.37947383343324353
+  (1103657, 621)	0.4248921082594281
+  (1103657, 662)	0.5058548339241276
+  (1103658, 13)	0.6319051212070349
+  (1103658, 397)	0.7750457520639169
+  (1103659, 410)	0.7828713025068843
+  (1103659, 864)	0.6221836736134875
+  (1103660, 563)	0.462670428975907
+  (1103660, 885)	0.38791364473022566
+  (1103660, 581)	0.43705901231878685
+  (1103660, 45)	0.48140918378532505
+  (1103660, 809)	0.46117642600358066
+  (1103661, 104)	0.7506269298303797
+  (1103661, 994)	0.6607262763152515
+  (1103662, 53)	0.5744341659998324
+  (1103662, 477)	0.8185507857989491
+  (1103663, 548)	1.0
+  (1103664, 123)	0.5761727312750321
+  (1103664, 340)	0.5418328657958369
+  (1103664, 924)	0.6119167666264262
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idf</span><span class="o">=</span><span class="n">vect</span><span class="o">.</span><span class="n">idf_</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dd</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">vect</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">(),</span> <span class="n">idf</span><span class="p">))</span>
+<span class="n">l</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">dd</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="n">dd</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+<span class="c1"># print(l)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">l</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="p">[</span><span class="s1">&#39;police&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dd</span><span class="p">[</span><span class="s1">&#39;forecast&#39;</span><span class="p">])</span>  <span class="c1"># police is most common and forecast is least common among the news headlines.</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>police forecast
+4.425126241429022
+7.93966901278893
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can therefore see that on the basis of the <strong>idf value</strong> , <strong>‘police’</strong> is the <strong>most frequent</strong> word while <strong>‘forecast’</strong> is <strong>least frequently</strong> occuring among the news.</p>
+</section>
+<section id="topic-modelling">
+<h2>TOPIC MODELLING<a class="headerlink" href="#topic-modelling" title="Permalink to this headline">#</a></h2>
+</section>
+</section>
+<section id="latent-semantic-analysis-lsa">
+<h1>Latent Semantic Analysis (LSA)<a class="headerlink" href="#latent-semantic-analysis-lsa" title="Permalink to this headline">#</a></h1>
+<p>The first approach that I have used is the LSA. <strong>LSA is basically singular value decomposition.</strong></p>
+<p><strong>SVD decomposes the original DTM into three matrices S=U.(sigma).(V.T). Here the matrix U denotes the document-topic matrix while (V) is the topic-term matrix.</strong></p>
+<p><strong>Each row of the matrix U(document-term matrix) is the vector representation of the corresponding document. The length of these vectors is the number of desired topics. Vector representation for the terms in our data can be found in the matrix V (term-topic matrix).</strong></p>
+<p>So, SVD gives us vectors for every document and term in our data. The length of each vector would be k. <strong>We can then use these vectors to find similar words and similar documents using the cosine similarity method.</strong></p>
+<p>We can use the truncatedSVD function to implement LSA. The n_components parameter is the number of topics we wish to extract.
+The model is then fit and transformed on the result given by vectorizer.</p>
+<p><strong>Lastly note that LSA and LSI (I for indexing) are the same and the later is just sometimes used in information retrieval contexts.</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">TruncatedSVD</span>
+<span class="n">lsa_model</span> <span class="o">=</span> <span class="n">TruncatedSVD</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;randomized&#39;</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">lsa_top</span><span class="o">=</span><span class="n">lsa_model</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">vect_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">lsa_top</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lsa_top</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># (no_of_doc*no_of_topics)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[ 9.89643903e-05  9.76452288e-03  2.38617397e-02 ... -4.40176615e-04
+  -2.22968585e-03 -1.10392576e-03]
+ [ 5.45388946e-04  5.11340198e-02  8.12565274e-02 ... -4.19252853e-02
+   2.33818602e-02  6.48656535e-03]
+ [ 5.39530192e-04  4.83438453e-02  1.48684664e-01 ... -8.30586373e-02
+   1.02704844e-02 -3.90544521e-02]
+ ...
+ [ 3.45696762e-04  2.02376611e-02  9.27628985e-02 ...  5.20374240e-01
+   5.87045135e-02 -8.34028575e-02]
+ [ 5.77834566e-05  4.97264849e-03  1.65807048e-02 ... -7.67979722e-05
+   7.19948822e-03 -6.67442689e-04]
+ [ 8.68754686e-04  1.39626405e-02  2.82763784e-02 ...  8.37960027e-04
+  -1.05045259e-03  5.09194053e-03]]
+(1103665, 10)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">l</span><span class="o">=</span><span class="n">lsa_top</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Document 0 :&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">topic</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Topic &quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="s2">&quot; : &quot;</span><span class="p">,</span><span class="n">topic</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+  
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Document 0 :
+Topic  0  :  0.009896439034555452
+Topic  1  :  0.9764522883194123
+Topic  2  :  2.386173965574605
+Topic  3  :  -0.759927151770875
+Topic  4  :  -0.27595598855522085
+Topic  5  :  -0.028531466086884907
+Topic  6  :  0.017571227492954655
+Topic  7  :  -0.04401766153892579
+Topic  8  :  -0.22296858475290793
+Topic  9  :  -0.11039257585876291
+</pre></div>
+</div>
+</div>
+</div>
+<p>Similalry for other documents we can do this. However note that values dont add to 1 as in LSA it is not probabiltiy of a topic in a document.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">lsa_model</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="c1"># (no_of_topics*no_of_words)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lsa_model</span><span class="o">.</span><span class="n">components_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(10, 1000)
+[[ 1.56233935e-05  2.21523405e-05  5.50927063e-05 ...  5.20561278e-05
+   2.94023425e-05  3.43601982e-05]
+ [ 7.96827775e-04  1.13734036e-03  1.29070311e-03 ...  1.73307863e-03
+   2.37784007e-03  2.69935362e-03]
+ [ 2.43201192e-03  3.62603949e-03  4.08238815e-03 ...  4.37127625e-03
+   4.61909874e-03  5.70998743e-03]
+ ...
+ [ 2.10135463e-03  2.46245697e-03  4.07951302e-03 ...  1.42896678e-02
+   2.05543135e-03  2.10956263e-04]
+ [-4.68144581e-05 -8.32570486e-06  2.26145119e-04 ...  1.04824847e-03
+  -8.17000276e-04 -2.03393998e-04]
+ [ 4.84078065e-05 -2.78633263e-04 -4.28111287e-04 ... -1.66730815e-03
+   3.25036932e-05  3.35209959e-05]]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="now-e-can-get-a-list-of-the-important-words-for-eah-of-the-10-topics-as-shown-for-simplicity-here-i-have-shown-10-words-for-each-topic">
+<h2>Now e can get a list of the important words for eah of the 10 topics as shown. For simplicity here I have shown 10 words for each topic.<a class="headerlink" href="#now-e-can-get-a-list-of-the-important-words-for-eah-of-the-10-topics-as-shown-for-simplicity-here-i-have-shown-10-words-for-each-topic" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># most important words for each topic</span>
+<span class="n">vocab</span> <span class="o">=</span> <span class="n">vect</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">comp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lsa_model</span><span class="o">.</span><span class="n">components_</span><span class="p">):</span>
+    <span class="n">vocab_comp</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vocab</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span>
+    <span class="n">sorted_words</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">vocab_comp</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Topic &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;: &quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">sorted_words</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+         
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Topic 0: 
+interview extended michael john david smith james andrew mark police 
+
+Topic 1: 
+police death probe fire woman crash call court missing say 
+
+Topic 2: 
+say plan council call govt back fire australia court water 
+
+Topic 3: 
+say australia police need minister report must could expert wont 
+
+Topic 4: 
+court fire face woman murder charged charge accused death australia 
+
+Topic 5: 
+call medium australia say inquiry prompt report spark change death 
+
+Topic 6: 
+fire house home say crew govt blaze damage threat warning 
+
+Topic 7: 
+australia back world south first test australian take win india 
+
+Topic 8: 
+council australia crash fire year death rate charged rise dy 
+
+Topic 9: 
+back council report fight market hit business police push news 
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="latent-dirichlet-allocation-lda">
+<h1>Latent Dirichlet Allocation (LDA)<a class="headerlink" href="#latent-dirichlet-allocation-lda" title="Permalink to this headline">#</a></h1>
+<p>LDA is the most popular technique.<strong>The topics then generate words based on their probability distribution. Given a dataset of documents, LDA backtracks and tries to figure out what topics would create those documents in the first place.</strong></p>
+<p><strong>To understand the maths it seems as if knowledge of Dirichlet distribution (distribution of distributions) is required which is quite intricate and left fior now.</strong></p>
+<p>To get an inituitive explanation of LDA checkout these blogs: <a class="reference external" href="https://www.analyticsvidhya.com/blog/2016/08/beginners-guide-to-topic-modeling-in-python/">this</a>  ,  <a class="reference external" href="https://tedunderwood.com/2012/04/07/topic-modeling-made-just-simple-enough/">this</a>  ,<a class="reference external" href="https://en.wikipedia.org/wiki/Topic_model">this</a>  ,  <a class="reference external" href="https://www.kaggle.com/arthurtok/spooky-nlp-and-topic-modelling-tutorial">this kernel on Kaggle</a>  ,  <a class="reference external" href="http://blog.echen.me/2011/08/22/introduction-to-latent-dirichlet-allocation/">this</a> and also <a class="reference external" href="https://www.kaggle.com/rcushen/topic-modelling-with-lsa-and-lda">this</a> kernel on same dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">LatentDirichletAllocation</span>
+<span class="n">lda_model</span><span class="o">=</span><span class="n">LatentDirichletAllocation</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">learning_method</span><span class="o">=</span><span class="s1">&#39;online&#39;</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> 
+<span class="c1"># n_components is the number of topics</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lda_top</span><span class="o">=</span><span class="n">lda_model</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">vect_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">lda_top</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># (no_of_doc,no_of_topics)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lda_top</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1103665, 10)
+[[0.04157028 0.04157028 0.04157028 ... 0.36617794 0.30125984 0.04157028]
+ [0.03689158 0.03689158 0.03689158 ... 0.03689158 0.03689158 0.03689158]
+ [0.04184252 0.04184252 0.04184252 ... 0.04184252 0.04184252 0.04184252]
+ ...
+ [0.04178881 0.04178881 0.04178881 ... 0.04178881 0.04178881 0.04178881]
+ [0.05       0.55       0.05       ... 0.05       0.05       0.05      ]
+ [0.03663108 0.03663108 0.03663108 ... 0.2351103  0.03663108 0.03663108]]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">sum</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lda_top</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+  <span class="nb">sum</span><span class="o">=</span><span class="nb">sum</span><span class="o">+</span><span class="n">i</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">)</span>  
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.0
+</pre></div>
+</div>
+</div>
+</div>
+<section id="note-that-the-values-in-a-particular-row-adds-to-1-this-is-beacuse-each-value-denotes-the-of-contribution-of-the-corressponding-topic-in-the-document">
+<h2>Note that the values in a particular row adds to 1. This is beacuse each value denotes the % of contribution of the corressponding topic in the document.<a class="headerlink" href="#note-that-the-values-in-a-particular-row-adds-to-1-this-is-beacuse-each-value-denotes-the-of-contribution-of-the-corressponding-topic-in-the-document" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># composition of doc 0 for eg</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Document 0: &quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">topic</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lda_top</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Topic &quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="s2">&quot;: &quot;</span><span class="p">,</span><span class="n">topic</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="s2">&quot;%&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Document 0: 
+Topic  0 :  4.157027803770169 %
+Topic  1 :  4.157027803820645 %
+Topic  2 :  4.157027803777354 %
+Topic  3 :  4.157027803776605 %
+Topic  4 :  4.157027803774463 %
+Topic  5 :  4.1570278037953035 %
+Topic  6 :  4.157027803758549 %
+Topic  7 :  36.61779356195755 %
+Topic  8 :  30.12598400778941 %
+Topic  9 :  4.157027803779964 %
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="as-we-can-see-topic-7-8-are-dominantly-present-in-document-0">
+<h2>As we can see Topic 7 &amp; 8 are dominantly present in document 0.<a class="headerlink" href="#as-we-can-see-topic-7-8-are-dominantly-present-in-document-0" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">lda_model</span><span class="o">.</span><span class="n">components_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lda_model</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># (no_of_topics*no_of_words)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[1.00001665e-01 1.00002942e-01 1.00007231e-01 ... 1.00006131e-01
+  1.00006996e-01 6.77778584e+02]
+ [1.00000392e-01 1.00000800e-01 1.00002321e-01 ... 1.00003801e-01
+  1.00006091e-01 1.00002668e-01]
+ [1.00003627e-01 1.00003488e-01 1.00009398e-01 ... 1.00004354e-01
+  1.00006168e-01 1.00004684e-01]
+ ...
+ [1.00002421e-01 1.00001269e-01 1.00003430e-01 ... 1.00003117e-01
+  1.00010235e-01 1.00003309e-01]
+ [3.05380770e+02 1.00001626e-01 1.00005187e-01 ... 1.80763591e+03
+  4.74531077e+02 1.00006340e-01]
+ [1.00002784e-01 1.00000990e-01 1.00003103e-01 ... 1.00004151e-01
+  1.00007408e-01 1.00001753e-01]]
+(10, 1000)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="most-important-words-for-a-topic-say-10-this-time">
+<h2>Most important words for a topic. (say 10 this time.)<a class="headerlink" href="#most-important-words-for-a-topic-say-10-this-time" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># most important words for each topic</span>
+<span class="n">vocab</span> <span class="o">=</span> <span class="n">vect</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">comp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lda_model</span><span class="o">.</span><span class="n">components_</span><span class="p">):</span>
+    <span class="n">vocab_comp</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vocab</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span>
+    <span class="n">sorted_words</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">vocab_comp</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Topic &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;: &quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">sorted_words</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Topic 0: 
+police world death first show country take house record john 
+
+Topic 1: 
+plan final council power water farmer shooting young port industry 
+
+Topic 2: 
+woman north school could coast tasmania open tasmanian west accused 
+
+Topic 3: 
+trump say melbourne canberra south state change win city bill 
+
+Topic 4: 
+australian year home back crash indigenous rural health labor high 
+
+Topic 5: 
+australia interview report time island dead claim deal refugee leader 
+
+Topic 6: 
+government sydney queensland call fire perth brisbane market turnbull test 
+
+Topic 7: 
+adelaide child court donald murder charged dy hospital former face 
+
+Topic 8: 
+election people 2016 drug help victoria community find missing fight 
+
+Topic 9: 
+attack family life found china live darwin business drum liberal 
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="to-better-visualize-words-in-a-topic-we-can-see-the-word-cloud-for-each-topic-top-50-words-are-plotted">
+<h2>To better visualize words in a topic we can see the word cloud. For each topic top 50 words are plotted.<a class="headerlink" href="#to-better-visualize-words-in-a-topic-we-can-see-the-word-cloud-for-each-topic-top-50-words-are-plotted" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wordcloud</span> <span class="kn">import</span> <span class="n">WordCloud</span>
+<span class="c1"># Generate a word cloud image for given topic</span>
+<span class="k">def</span> <span class="nf">draw_word_cloud</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+  <span class="n">imp_words_topic</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+  <span class="n">comp</span><span class="o">=</span><span class="n">lda_model</span><span class="o">.</span><span class="n">components_</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+  <span class="n">vocab_comp</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">vocab</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span>
+  <span class="n">sorted_words</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">vocab_comp</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">50</span><span class="p">]</span>
+  <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sorted_words</span><span class="p">:</span>
+    <span class="n">imp_words_topic</span><span class="o">=</span><span class="n">imp_words_topic</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+  <span class="n">wordcloud</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">imp_words_topic</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">wordcloud</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+ 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># topic 0</span>
+<span class="n">draw_word_cloud</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Topic Modelling_72_0.png" src="_images/Topic Modelling_72_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># topic 1</span>
+<span class="n">draw_word_cloud</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># ...</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/Topic Modelling_73_0.png" src="_images/Topic Modelling_73_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="the-end">
+<h1>THE END !!!<a class="headerlink" href="#the-end" title="Permalink to this headline">#</a></h1>
+</section>
+<section id="please-star-upvote-in-case-u-liked-it">
+<h1>[Please star/upvote in case u liked it. ]<a class="headerlink" href="#please-star-upvote-in-case-u-liked-it" title="Permalink to this headline">#</a></h1>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By The Jupyter Book Community<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
